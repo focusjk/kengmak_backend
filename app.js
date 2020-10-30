@@ -3,10 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose')
+const dotenv = require('dotenv')
+dotenv.config();
 
 var indexRouter = require('./routes/index');
 var postRouter = require('./routes/post');
 var commentRouter = require('./routes/comment');
+
+mongoose.connect(process.env.DB_ENDPOINT, { useNewUrlParser: true, useUnifiedTopology: true });
 
 var app = express();
 

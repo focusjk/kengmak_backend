@@ -2,21 +2,32 @@ const Post = require('../models/post.js');
 const { promiseQuery } = require('../util/promiseQuery')
 
 const create = async data => {
-	// const chat_model = new Chat(data);
-	// await chat_model.save();
-	// return { id: chat_model._id, messages: chat_model.messages }
+	const postModel = new Post(data);
+	await postModel.save();
+	return postModel
 }
 
 const find = async query => {
-	// const data = await promiseQuery(Chat, query);
-	// return data
+	const postModel = await promiseQuery(Post, query);
+	return postModel
 }
 
-const insertMessage = async (_id, data) => {
+const edit = ({ content, owner, _id }) => {
+
+
+	// 	const postModel = postModels[0]
+	// 	if(postModel.owner !== owner) {
+	// 		throw new Error('Post not found');
+	// 	}
+	// 	const postModel = await promiseQuery(Post, query);
+	// 	return postModel
+}
+
+const insertMessage = (_id, data) => {
 	// const chat_model = await Chat.findOne({ _id });
 	// chat_model.messages.push(data)
 	// await chat_model.save();
 	// return chat_model
 }
 
-module.exports = { create, find, insertMessage }
+module.exports = { create, find, edit, insertMessage }

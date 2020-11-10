@@ -8,19 +8,12 @@ const create = async data => {
 }
 
 const find = async query => {
-	const postModel = await promiseQuery(Post, query);
-	return postModel
-}
-
-const edit = ({ content, owner, _id }) => {
-
-
-	// 	const postModel = postModels[0]
-	// 	if(postModel.owner !== owner) {
-	// 		throw new Error('Post not found');
-	// 	}
-	// 	const postModel = await promiseQuery(Post, query);
-	// 	return postModel
+	try {
+		const postModel = await promiseQuery(Post, query);
+		return postModel
+	} catch (err) {
+		return []
+	}
 }
 
 const insertMessage = (_id, data) => {
@@ -30,4 +23,4 @@ const insertMessage = (_id, data) => {
 	// return chat_model
 }
 
-module.exports = { create, find, edit, insertMessage }
+module.exports = { create, find, insertMessage }

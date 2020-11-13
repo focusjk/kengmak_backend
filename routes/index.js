@@ -10,7 +10,7 @@ router.post('/login', async (req, res, next) => {
   const { username, password_in } = req.body;
   const query = { username }
   try {
-    
+
     const userModel = await UserService.find(query)
     if (userModel.length === 0 ) {
       throw 'Invalid username or password';
@@ -22,7 +22,8 @@ router.post('/login', async (req, res, next) => {
       throw 'Invalid username or password';
     }
     const token = jwt.sign({ _id, role }, TOKEN_KEYWORD)
-    res.send({ token });
+    res.cookie('token', token, {httpOnly: true});
+    res.send({token})
     
   } catch (error) {
     res.status(400).send(error)

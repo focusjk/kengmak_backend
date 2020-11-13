@@ -13,7 +13,6 @@ require('./configs/passport');
 var indexRouter = require('./routes/index');
 var postRouter = require('./routes/post');
 var commentRouter = require('./routes/comment');
-var authenRouter = require('./routes/auth');
 
 mongoose.connect(process.env.DB_ENDPOINT, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -32,7 +31,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/post', postRouter);
 app.use('/comment', commentRouter);
-app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

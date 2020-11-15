@@ -6,6 +6,7 @@ const UserSchema = new Schema({
   salt: String,
   password: String,
   role: { type: String, enum: ['USER', 'MODERATOR'] },
+  token: String,
 });
 
 module.exports = User = mongoose.model('User', UserSchema, 'User');

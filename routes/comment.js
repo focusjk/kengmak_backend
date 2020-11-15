@@ -8,6 +8,8 @@ router.post(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res, next) => {
+    const token = req.headers.authorization
+    if (token !== 'Bearer ' + req.user.token) throw 'Token expired'
     const { _id, username } = req.user;
     const { postId, content } = req.body;
     try {
@@ -47,6 +49,8 @@ router.post(
   "/edit",
   passport.authenticate("jwt", { session: false }),
   async (req, res, next) => {
+    const token = req.headers.authorization
+    if (token !== 'Bearer ' + req.user.token) throw 'Token expired'
     const { username, role } = req.user;
     const { postId, commentId, content } = req.body;
     try {
@@ -80,6 +84,8 @@ router.delete(
     const { username, role } = req.user;
     const { postId, commentId } = req.body;
     try {
+      const token = req.headers.authorization
+      if (token !== 'Bearer ' + req.user.token) throw 'Token expired'
       const postModel = await PostService.find({ _id: postId });
       if (postModel.length === 0) throw "Not found post";
       const post = postModel[0];

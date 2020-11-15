@@ -10,7 +10,6 @@ const user = require("../models/user");
 router.post("/login", async (req, res, next) => {
   const { username, password_in } = req.body;
   const query = { username };
-  console.log(req);
   try {
     const userModel = await UserService.find(query);
     if (userModel.length === 0) {

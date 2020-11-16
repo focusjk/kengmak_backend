@@ -15,13 +15,13 @@ router.post("/login", async (req, res, next) => {
     if (userModel.length === 0) {
       throw "Invalid username or password";
     }
-    const { _id, password, role, salt } = userModel[0];
+    const { username, password, role, salt } = userModel[0];
     const check = await checkPass.compare(password_in + salt, password);
 
     if (check) {
       throw "Invalid username or password";
     }
-    const token = jwt.sign({ _id, role }, TOKEN_KEYWORD);
+    const token = jwt.sign({ username, role }, TOKEN_KEYWORD);
     res.cookie("token", token, { httpOnly: true });
     res.send({ token });
   } catch (error) {

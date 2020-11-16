@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-
+const fs = require('fs')
 /**
  * Module dependencies.
  */
@@ -15,11 +15,17 @@ var http = require('http');
 var port = normalizePort(process.env.PORT || '4000');
 app.set('port', port);
 
+// /**
+//  * Create HTTP server.
+//  */
+
+// var server = http.createServer(app);
+
 /**
- * Create HTTP server.
+ * create HTTPS server
  */
 
-var server = http.createServer(app);
+var server = https.createServer({key: fs.readFileSync('server.key'),cert: fs.readFileSync('server.cert')},app);
 
 /**
  * Listen on provided port, on all network interfaces.

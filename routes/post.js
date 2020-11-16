@@ -8,8 +8,19 @@ router.get('/',
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
+      const token = req.headers.authorization
+      console.log(token, 'Bearer ' + req.user.token, token !== 'Bearer ' + req.user.token)
+      if (token !== 'Bearer ' + req.user.token) throw 'Token expired'
       const postModel = await PostService.find({ deleted_at: null })
-      res.send(postModel);
+      const post = postModel.map(({ comments, content, owner, _id }) => {
+        return {
+          content,
+          owner,
+          _id,
+          comments: comments.filter(i => i.deleted_at === null)
+        }
+      })
+      res.send(post);
     } catch (error) {
       res.status(400).send(error)
     }
@@ -19,9 +30,11 @@ router.get('/',
 router.post('/',
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
-    const { _id, username: owner } = req.user
-    const { content } = req.body;
     try {
+      const token = req.headers.authorization
+      if (token !== 'Bearer ' + req.user.token) throw 'Token expired'
+      const { _id, username: owner } = req.user
+      const { content } = req.body;
       if (!content) throw 'Not found content'
       const postModel = await PostService.create({ content, owner })
       res.send(postModel);
@@ -34,9 +47,11 @@ router.post('/',
 router.post('/edit',
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
-    const { _id, username, role } = req.user
-    const { postId, content } = req.body;
     try {
+      const token = req.headers.authorization
+      if (token !== 'Bearer ' + req.user.token) throw 'Token expired'
+      const { _id, username, role } = req.user
+      const { postId, content } = req.body;
       if (!content) throw 'Not found content'
       const postModel = await PostService.find({ _id: postId })
       console.log(postModel)
@@ -56,9 +71,11 @@ router.post('/edit',
 router.delete('/',
   passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
-    const { username, role } = req.user
-    const { postId } = req.body;
     try {
+      const token = req.headers.authorization
+      if (token !== 'Bearer ' + req.user.token) throw 'Token expired'
+      const { username, role } = req.user
+      const { postId } = req.body;
       const postModel = await PostService.find({ _id: postId })
       if (postModel.length === 0) throw 'Not found post'
       const post = postModel[0]

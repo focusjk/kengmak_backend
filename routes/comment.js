@@ -15,7 +15,6 @@ router.post(
     try {
       if (!content) throw "Not found content";
       const postModel = await PostService.find({ _id: postId });
-      console.log(postModel);
       if (postModel.length === 0) throw "Not found post";
       const post = postModel[0];
       if (post.comments.length === 0) {
@@ -36,7 +35,7 @@ router.post(
       };
       post.comments.push(new_comment);
       await post.save();
-      console.log(post);
+      console.log(new_comment);
       res.send(new_comment);
     } catch (error) {
       res.status(400).send(error);
@@ -57,7 +56,6 @@ router.post(
       const postModel = await PostService.find({ _id: postId });
       if (postModel.length === 0) throw "Not found post";
       const post = postModel[0];
-
       for (var i = 0; i < post.comments.length; i++) {
         if (post.comments[i].id === commentId) {
           if (role !== "MODERATOR" && post.comments[i].owner !== username)
@@ -68,7 +66,7 @@ router.post(
       }
       await post.markModified("comments");
       await post.save();
-      console.log(post);
+      console.log(edited_comment);
       res.send(edited_comment);
     } catch (error) {
       res.status(400).send(error);
@@ -98,7 +96,6 @@ router.delete(
       }
       await post.markModified("comments");
       await post.save();
-      console.log(post);
       res.send("Done");
     } catch (error) {
       res.status(400).send(error);

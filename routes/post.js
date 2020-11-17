@@ -9,7 +9,6 @@ router.get('/',
   async (req, res, next) => {
     try {
       const token = req.headers.authorization
-      console.log(token, 'Bearer ' + req.user.token, token !== 'Bearer ' + req.user.token)
       if (token !== 'Bearer ' + req.user.token) throw 'Token expired'
       const postModel = await PostService.find({ deleted_at: null })
       const post = postModel.map(({ comments, content, owner, _id }) => {
@@ -54,7 +53,6 @@ router.post('/edit',
       const { postId, content } = req.body;
       if (!content) throw 'Not found content'
       const postModel = await PostService.find({ _id: postId })
-      console.log(postModel)
       if (postModel.length === 0) throw 'Not found post'
       const post = postModel[0]
       if (role !== "MODERATOR" && post.owner !== username) throw 'Not allow to edit post'

@@ -26,7 +26,7 @@ router.post("/login", async (req, res, next) => {
       expiresIn: expirationSeconds,
     });
     userModel[0].token = token;
-    await userModel[0].save()
+    await userModel[0].save();
     res.cookie("token", token, { httpOnly: true });
     res.send({ token, username, role });
   } catch (error) {
@@ -34,21 +34,25 @@ router.post("/login", async (req, res, next) => {
   }
 });
 
-router.post("/logout",
-  passport.authenticate('jwt', { session: false }),
+router.post(
+  "/logout",
+  passport.authenticate("jwt", { session: false }),
   async (req, res, next) => {
-    const token = req.headers.authorization
+    const token = req.headers.authorization;
     try {
-      const userModel = await UserService.find({ token: token.replace('Bearer ', '') });
+      const userModel = await UserService.find({
+        token: token.replace("Bearer ", ""),
+      });
       if (userModel.length === 1) {
         userModel[0].token = null;
-        await userModel[0].save()
+        await userModel[0].save();
       }
-      res.send('Done');
+      res.send("Done");
     } catch (error) {
       res.status(400).send(error);
     }
-  });
+  }
+);
 
 // router.post('/login_uname', async (req, res, next) => {
 //   const { username } = req.body;

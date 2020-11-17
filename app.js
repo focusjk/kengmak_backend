@@ -3,6 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var helmet = require("helmet");
 var mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
@@ -33,7 +34,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header("Access-Control-Allow-Origin", "https://localhost:3000");
   res.header(
     "Access-Control-Allow-Methods",
     "POST, GET, PUT, PATCH, DELETE, OPTIONS"
@@ -67,5 +68,6 @@ app.use(function (err, req, res, next) {
 });
 
 app.use(cors({ origin: "http://localhost:3000", credentials: true }));
+app.use(helmet());
 
 module.exports = app;

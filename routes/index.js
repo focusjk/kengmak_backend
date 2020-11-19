@@ -8,17 +8,17 @@ const checkPass = require("../util/checkPass");
 const user = require("../models/user");
 
 router.post("/login", async (req, res, next) => {
-  const { username, password_in } = req.body;
+  const { username, password: _password } = req.body;
   const query = { username };
   try {
     const userModel = await UserService.find(query);
     if (userModel.length === 0) {
       throw "Invalid username or password";
     }
-    const { _id, password, role, salt, username } = userModel[0];
-    const check = await checkPass.compare(password_in + salt, password);
+    const { _id, password, role, username } = userModel[0];
+    const check = await checkPass.compare(_password, password);
 
-    if (check) {
+    if (!check) {
       throw "Invalid username or password";
     }
     const expirationSeconds = 10 * 60; // one week
